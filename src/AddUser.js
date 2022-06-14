@@ -134,7 +134,7 @@ const AddUser = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={close}>Cancel</Button>
-        {edit ? (
+        {editStatus ? (
           <Button onClick={addData}>Edit</Button>
         ) : (
           <Button onClick={addData}>Add</Button>
