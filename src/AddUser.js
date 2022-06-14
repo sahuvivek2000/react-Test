@@ -8,7 +8,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import './style.css';
 
-const AddUser = ({ open, handleClose, addUser, edit }) => {
+const AddUser = ({
+  open,
+  handleClose,
+  addUser,
+  edit,
+  editUser,
+  editStatus,
+}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -17,7 +24,9 @@ const AddUser = ({ open, handleClose, addUser, edit }) => {
 
   useEffect(() => {
     console.log('in use effect');
-    if (edit) {
+    console.log('dsf', edit);
+
+    if (editStatus) {
       setName(edit.name);
       setEmail(edit.email);
       setPhone(edit.phone);
@@ -28,7 +37,10 @@ const AddUser = ({ open, handleClose, addUser, edit }) => {
 
   const addData = () => {
     let data;
-    if (edit) {
+    // console.log('dsf', edit);
+
+    if (editStatus) {
+      // console.log('dsf', edit);
       data = {
         ...edit,
         name,
@@ -39,6 +51,7 @@ const AddUser = ({ open, handleClose, addUser, edit }) => {
           zipcode: zipCode,
         },
       };
+      editUser(data);
     } else {
       data = {
         name,
@@ -49,9 +62,9 @@ const AddUser = ({ open, handleClose, addUser, edit }) => {
           zipcode: zipCode,
         },
       };
+      addUser(data);
     }
     console.log(data);
-    addUser(data);
     close();
   };
 
@@ -121,7 +134,11 @@ const AddUser = ({ open, handleClose, addUser, edit }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={close}>Cancel</Button>
-        <Button onClick={addData}>Subscribe</Button>
+        {edit ? (
+          <Button onClick={addData}>Edit</Button>
+        ) : (
+          <Button onClick={addData}>Add</Button>
+        )}
       </DialogActions>
     </Dialog>
   );

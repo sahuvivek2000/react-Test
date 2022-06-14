@@ -17,6 +17,7 @@ export default function App() {
   const [tableData, setTableData] = useState();
   // const [record, setRecord] = useState();
   const [open, setOpen] = useState(false);
+  const [editStatus, setEditStatus] = useState(false);
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
@@ -35,23 +36,28 @@ export default function App() {
 
   const handleClose = () => {
     setOpen(false);
+    // record.id = null;
     // record = {};
   };
   const addUser = (data) => {
     console.log('data', data);
-    if (data.id) {
-      const index = tableData.findIndex((item) => item.id === data.id);
-      console.log(index);
-      // setTableData()
+
+    const lastId = tableData[tableData.length - 1].id;
+    data.id = lastId + 1;
+    setTableData([...tableData, data]);
+  };
+  const editUser = (data) => {
+    const index = tableData.findIndex((item) => item.id === data.id);
+    console.log(index);
+    if (index >= 0) {
       tableData[index] = data;
     } else {
-      const lastId = tableData[tableData.length - 1].id;
-      data.id = lastId + 1;
       setTableData([...tableData, data]);
     }
   };
 
   const editRecord = (data) => {
+    setEditStatus(true);
     record = data;
     // console.log(data,record)
     setOpen(true);
@@ -74,7 +80,12 @@ export default function App() {
                   <TableCell className="tableH">City</TableCell>
                   <TableCell className="tableH">ZipCode</TableCell>
                   <TableCell className="tableH">
-                    <AddIcon onClick={() => setOpen(true)} />
+                    <AddIcon
+                      onClick={() => {
+                        setOpen(true);
+                        setEditStatus(false);
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -108,6 +119,8 @@ export default function App() {
         handleClose={handleClose}
         addUser={addUser}
         edit={record}
+        editUser={editUser}
+        editStatus={editStatus}
       />
     </div>
   );
